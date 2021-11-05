@@ -8,7 +8,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from basenet.vgg16_bn import vgg16_bn, init_weights
+from .basenet.vgg16_bn import vgg16_bn, init_weights
+
 
 class double_conv(nn.Module):
     def __init__(self, in_ch, mid_ch, out_ch):
@@ -54,7 +55,7 @@ class CRAFT(nn.Module):
         init_weights(self.upconv3.modules())
         init_weights(self.upconv4.modules())
         init_weights(self.conv_cls.modules())
-        
+
     def forward(self, x):
         """ Base network """
         sources = self.basenet(x)
@@ -77,7 +78,8 @@ class CRAFT(nn.Module):
 
         y = self.conv_cls(feature)
 
-        return y.permute(0,2,3,1), feature
+        return y.permute(0, 2, 3, 1), feature
+
 
 if __name__ == '__main__':
     model = CRAFT(pretrained=True).cuda()
